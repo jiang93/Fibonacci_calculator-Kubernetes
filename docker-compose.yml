@@ -6,7 +6,7 @@ services:
 
   express:
     image: "huiying530/fib_calculator_server"
-    mem_limit: 256m
+    mem_limit: 512m
     hostname: express
     environment:
       - REDIS_HOST=$REDIS_HOST
