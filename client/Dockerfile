@@ -19,4 +19,4 @@ COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /fib_calculator/build /usr/share/nginx/html
 
 # default startup command
-CMD ["npm", "run", "start"]
+CMD ["nginx", "-g", "daemon off;"]
