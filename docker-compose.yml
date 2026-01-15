@@ -4,18 +4,18 @@ services:
     mem_limit: 256m
     hostname: client
 
-  express:
+  server:
     image: "huiying530/fib_calculator_server"
     mem_limit: 512m
     hostname: express
     environment:
-      REDIS_HOST:
-      REDIS_PORT:
-      PGUSER:
-      PGHOST:
-      PGDATABASE:
-      PGPASSWORD:
-      PGPORT:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
 
   worker:
     image: "huiying530/fib_calculator_worker"
