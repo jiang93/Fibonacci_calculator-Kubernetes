@@ -1,48 +1,31 @@
 services:
-  postgres:
-    image: "postgres:latest"
+  client:
+    image: "huiying530/fib_calculator_client"
+    mem_limit: 128m
+    hostname: client
+
+  express:
+    image: "huiying530/fib_calculator_server"
+    mem_limit: 128m
+    hostname: express
     environment:
-      - POSTGRES_PASSWORD=postgres_password
-  redis:
-    image: "redis:latest"
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
+
+  worker:
+    image: "huiying530/fib_calculator_worker"
+    mem_limit: 128m
+    hostname: worker
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
   nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
+    image: "huiying530/fib_calculator_nginx"
+    mem_limit: 128m
     ports:
       - "3002:80"
-  express:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./server
-    volumes:
-      - /fib_calculator/node_modules
-      - ./server:/fib_calculator
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PGUSER=postgres
-      - PGHOST=postgres
-      - PGDATABASE=postgres
-      - PGPASSWORD=postgres_password
-      - PGPORT=5432
-  client:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /fib_calculator/node_modules
-      - ./client:/fib_calculator
-    environment:
-      - WDS_SOCKER_PORT=0
-  worker:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./worker
-    volumes:
-      - /fib_calculator/node_modules
-      - ./worker:/fib_calculator
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
