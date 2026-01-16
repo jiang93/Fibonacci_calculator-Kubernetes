@@ -39,7 +39,7 @@ class Fib extends Component {
       this.fetchIndexes();
   } catch (err) 
     {
-      if (err.response && err.response.status == 422) {
+      if (err.response && err.response.status === 422) {
         alert(err.response.data);
       } 
       else {
