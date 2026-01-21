@@ -44,9 +44,6 @@ class Fib extends Component {
   };
 
   renderSeenIndexes() {
-    if (!Array.isArray(this.state.seenIndexes)) {
-      return "API error: /api/values/all returned HTML (check nginx proxy)";
-    }
     return this.state.seenIndexes.map(({ number }) => number).join(', ');
   }
 
