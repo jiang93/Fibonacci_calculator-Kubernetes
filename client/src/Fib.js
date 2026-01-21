@@ -45,7 +45,7 @@ class Fib extends Component {
       this.fetchValues();
 
     } catch (err) {
-      alert(err.response.data);
+      alert("Oops! Something went wrong. Please try again.");
     }
   };
 
