@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-Deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      component: web
+    spec:
+      containers:
+        - name: client
+          image: huiying530/fib_calculator_client
+          ports: 
+            - containerPort: 3000
