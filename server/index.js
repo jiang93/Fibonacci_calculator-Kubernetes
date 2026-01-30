@@ -17,10 +17,6 @@ const pgClient = new Pool({
   database: keys.pgDatabase,
   password: keys.pgPassword,
   port: keys.pgPort,
-  ssl:
-    process.env.NODE_ENV !== 'production'
-      ? false
-      : { rejectUnauthorized: false },
 });
 
 pgClient.on('connect', (client) => {
@@ -58,6 +54,15 @@ app.get('/values/current', async (req, res) => {
 
 app.post('/values', async (req, res) => {
   const index = req.body.index;
+  console.log('Received index:', index);
+
+  if (isNaN(index)) {
+    return res.status(400).send('Index must be a number');
+  }
+
+  if (index < 0) {
+    return res.status(400).send('Index must be non-negative number');
+  }
 
   if (parseInt(index) > 40) {
     return res.status(422).send('Index exceeded limit');

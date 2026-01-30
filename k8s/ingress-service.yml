@@ -3,12 +3,23 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
+  ingressClassName: nginx
   rules:
     - http:
         paths:
+          # 🔥 API — rewrite /api/xxx → /xxx
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: server-cluster-ip-service
+                port:
+                  number: 5000
+
+          # 🔥 Frontend — NO rewrite
           - path: /
             pathType: Prefix
             backend:
@@ -16,10 +27,4 @@ spec:
                 name: client-cluster-ip-service
                 port:
                   number: 3000
-          - path: /api/
-            pathType: Prefix
-            backend: 
-              service: 
-                name: server-cluster-ip-service
-                port:
-                  number: 5000
+
