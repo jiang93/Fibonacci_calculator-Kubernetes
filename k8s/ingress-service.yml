@@ -10,7 +10,7 @@ spec:
   rules:
     - http:
         paths:
-          # 🔥 API — rewrite /api/xxx → /xxx
+          # API requests: /api/... -> /...
           - path: /api(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
@@ -19,12 +19,11 @@ spec:
                 port:
                   number: 5000
 
-          # 🔥 Frontend — NO rewrite
-          - path: /
-            pathType: Prefix
+          # Frontend everything else
+          - path: /(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: client-cluster-ip-service
                 port:
                   number: 3000
-
