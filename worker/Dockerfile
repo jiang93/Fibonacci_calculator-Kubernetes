@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # make fir, copy package file and install dependencies
-WORKDIR "/fib_calculator"
+WORKDIR "/fib_calculator_kubernetes"
 COPY package.json .
 RUN npm install
 

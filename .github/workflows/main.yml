@@ -1,38 +1,20 @@
-name: Fib Calculator
+name: Fib Calculator k8s
 on:
   push:
     branches:
-      - main # check your repo, your default branch might be master!
+      - main 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build -t huiying530/fib_calculator -f client/Dockerfile.dev client
-      - run: docker run -e CI=true huiying530/fib_calculator npm run test
+      -uses: actions/checkout@v3
+      - run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - run: docker build -t huiying530/fib_calculator_kubernetes -f client/Dockerfile.dev client
+            
+      - run: docker build -t huiying530/fib_calculator_kubernetes_client client
+      - run: docker build -t huiying530/fib_calculator_kubernetes_server server
+      - run: docker build -t huiying530/fib_calculator_kubernetes_worker worker
 
-      - run: docker build -t huiying530/fib_calculator_client client
-      - run: docker build -t huiying530/fib_calculator_nginx nginx
-      - run: docker build -t huiying530/fib_calculator_server server
-      - run: docker build -t huiying530/fib_calculator_worker worker
-
-      - run: docker push huiying530/fib_calculator_client
-      - run: docker push huiying530/fib_calculator_nginx
-      - run: docker push huiying530/fib_calculator_server
-      - run: docker push huiying530/fib_calculator_worker
-
-      - name: Generate deployment package
-        run: zip -r fib-calculator.zip . -x '*.git*'
-
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v21
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          application_name: fibo-calculator
-          environment_name: Fibo-calculator-env
-          existing_bucket_name: elasticbeanstalk-ap-southeast-1-083597744184
-          region: ap-southeast-1
-          version_label: ${{ github.sha }}
-          deployment_package: fib-calculator.zip
+      - run: docker push huiying530/fib_calculator_kubernetes_client
+      - run: docker push huiying530/fib_calculator_kubernetes_server
+      - run: docker push huiying530/fib_calculator_kubernetes_worker
