@@ -10,6 +10,7 @@ spec:
   rules:
     - http:
         paths:
+          # API rewrite only
           - path: /api/?(.*)
             pathType: ImplementationSpecific
             backend:
@@ -18,6 +19,7 @@ spec:
                 port:
                   number: 5000
 
+          # everything else untouched
           - path: /
             pathType: Prefix
             backend:
